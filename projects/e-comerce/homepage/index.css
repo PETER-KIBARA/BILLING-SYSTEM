@@ -1,0 +1,349 @@
+/* ============================================
+   CLEAN & FOCUSED HOMEPAGE STYLES
+   ============================================ */
+
+/* 1. Header - Clean Version */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ff7b00;
+  letter-spacing: -0.5px;
+}
+
+/* Search bar */
+.search-bar {
+  padding: 10px 15px;
+  width: 300px;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #ff7b00;
+  box-shadow: 0 0 0 3px rgba(255, 123, 0, 0.1);
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 25px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: #ff7b00;
+}
+
+.nav a.active:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ff7b00;
+}
+
+/* Hamburger icon */
+.hamburger {
+  font-size: 28px;
+  display: none;
+  cursor: pointer;
+  color: #333;
+  padding: 5px;
+}
+
+.hamburger:hover {
+  color: #ff7b00;
+}
+
+/* 2. Mobile Menu */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  padding: 15px 25px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.mobile-menu a {
+  padding: 12px 0;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  color: #ff7b00;
+}
+
+/* 3. Hero Section */
+.hero {
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('res/hero-bg.jpg') center/cover no-repeat;
+  padding: 100px 20px;
+  text-align: center;
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.cta-btn {
+  padding: 15px 35px;
+  background: #ff7b00;
+  border: none;
+  color: white;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.cta-btn:hover {
+  background: #e66d00;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 123, 0, 0.3);
+}
+
+/* 4. Featured Section */
+.featured-section {
+  padding: 60px 20px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featured-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.featured-section h2:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #ff7b00;
+}
+
+/* Product Grid - Show ALL foods */
+.product-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 0 10px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover img {
+  transform: scale(1.05);
+}
+
+.card h3 {
+  margin: 20px 0 10px;
+  font-size: 1.3rem;
+  color: #333;
+  padding: 0 20px;
+}
+
+.price {
+  color: #ff7b00;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+/* View All Button */
+.view-all-container {
+  text-align: center;
+  padding: 40px 20px 80px;
+}
+
+.view-all-btn {
+  padding: 15px 40px;
+  background: transparent;
+  border: 2px solid #ff7b00;
+  color: #ff7b00;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+  background: #ff7b00;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 123, 0, 0.3);
+}
+
+/* 5. Responsive Design */
+@media (max-width: 768px) {
+  /* Hide search bar and main navigation on mobile */
+  .search-bar,
+  .nav {
+    display: none;
+  }
+  
+  /* Show hamburger menu */
+  .hamburger {
+    display: block;
+  }
+  
+  /* Adjust hero section */
+  .hero {
+    padding: 80px 20px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+  
+  /* Stack product grid vertically on mobile */
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 0 15px;
+  }
+  
+  /* Adjust featured section */
+  .featured-section h2 {
+    font-size: 2rem;
+  }
+  
+  /* Adjust header padding */
+  .header {
+    padding: 15px 20px;
+  }
+  
+  .logo {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for small phones */
+  .hero {
+    padding: 60px 20px;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+  }
+  
+  .cta-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+  
+  .featured-section {
+    padding: 40px 15px;
+  }
+  
+  .featured-section h2 {
+    font-size: 1.8rem;
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .price {
+    font-size: 1.3rem;
+  }
+  
+  .view-all-btn {
+    padding: 12px 30px;
+    font-size: 15px;
+  }
+}
+
+/* Fallback for missing images */
+img[onerror] {
+  background: #f5f5f5;
+  padding: 20px;
+}
