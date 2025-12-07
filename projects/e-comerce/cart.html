@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart – FastFoodExpress</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">FastFoodExpress</div>
+  
+  <div class="header-actions">
+    <div class="cart-icon" onclick="window.location.href='cart.html'">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cart.html">Cart</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="#">Contact</a>
+</div>
+
+<section class="cart-page">
+  <h1>Your Shopping Cart</h1>
+  
+  <div class="cart-container">
+    <div class="cart-items" id="cartItems">
+      <!-- Cart items will be loaded here -->
+    </div>
+    
+    <div class="cart-summary">
+      <h2>Order Summary</h2>
+      <div class="summary-details">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="subtotal">Ksh 0</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery Fee:</span>
+          <span id="deliveryFee">Ksh 150</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span id="totalAmount">Ksh 150</span>
+        </div>
+      </div>
+      
+      <button class="checkout-btn" onclick="proceedToCheckout()">
+        <i class="fas fa-lock"></i> Proceed to Checkout
+      </button>
+      
+      <button class="continue-shopping" onclick="window.location.href='menu.html'">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </button>
+    </div>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

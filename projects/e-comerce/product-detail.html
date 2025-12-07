@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details – FastFoodExpress</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">FastFoodExpress</div>
+  
+  <div class="header-actions">
+    <div class="cart-icon" onclick="window.location.href='cart.html'">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cart.html">Cart</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="#">Contact</a>
+</div>
+
+<section class="product-detail">
+  <div class="detail-container">
+    <img id="detailImage" src="" alt="" class="detail-img">
+    <div class="info">
+      <h1 id="detailName"></h1>
+      <p id="detailDescription" class="description"></p>
+      <p class="price" id="detailPrice"></p>
+      
+      <div class="quantity-selector">
+        <button onclick="updateQuantity(-1)">-</button>
+        <input type="number" id="quantity" value="1" min="1" max="10">
+        <button onclick="updateQuantity(1)">+</button>
+      </div>
+      
+      <button class="cta-btn" onclick="addToCartFromDetail()">
+        <i class="fas fa-cart-plus"></i> Add to Cart
+      </button>
+      
+      <button class="buy-now-btn" onclick="buyNow()">
+        <i class="fas fa-bolt"></i> Buy Now
+      </button>
+      
+      <div class="special-instructions">
+        <label for="instructions">Special Instructions:</label>
+        <textarea id="instructions" placeholder="Any special requests for this order..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

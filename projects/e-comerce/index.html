@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FastFood Express - Home</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">FastFoodExpress</div>
+  
+  <div class="header-actions">
+    <input type="text" class="search-bar" placeholder="Search meals..." id="homeSearch" />
+    <div class="cart-icon" onclick="window.location.href='cart.html'">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html" class="active">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cart.html">Cart</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="active">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="#">Contact</a>
+  <div class="mobile-cart" onclick="window.location.href='cart.html'">
+    <i class="fas fa-shopping-cart"></i>
+    <span>View Cart (<span class="cart-count">0</span>)</span>
+  </div>
+</div>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Fresh • Fast • Delivered</h1>
+    <p>Quality meals delivered right to your doorstep within 30 minutes</p>
+    <div class="hero-buttons">
+      <button class="cta-btn" onclick="window.location.href='#allFoods'">Order Now</button>
+      <button class="cta-btn secondary" onclick="window.location.href='menu.html'">View Full Menu</button>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="quick-stats">
+  <div class="stats-container">
+    <div class="stat-item">
+      <i class="fas fa-bolt"></i>
+      <h3>30 Min</h3>
+      <p>Fast Delivery</p>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-utensils"></i>
+      <h3>50+</h3>
+      <p>Menu Items</p>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-star"></i>
+      <h3>4.8/5</h3>
+      <p>Customer Rating</p>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-truck"></i>
+      <h3>Free</h3>
+      <p>Over Ksh 1500</p>
+    </div>
+  </div>
+</section>
+
+<!-- All Foods Section -->
+<section class="all-foods-section" id="allFoods">
+  <div class="section-header">
+    <h2>All Our Delicious Foods</h2>
+    <p>Browse through our complete menu and order your favorites</p>
+    
+    <div class="home-search-container">
+      <input 
+        type="text" 
+        id="homeSearchInput" 
+        class="home-search" 
+        placeholder="Search for burgers, pizza, drinks..."
+      />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+    
+    <div class="home-category-filters">
+      <button class="home-category-btn active" data-category="all">All Foods</button>
+      <button class="home-category-btn" data-category="burger">Burgers</button>
+      <button class="home-category-btn" data-category="pizza">Pizza</button>
+      <button class="home-category-btn" data-category="sides">Sides</button>
+      <button class="home-category-btn" data-category="drinks">Drinks</button>
+    </div>
+  </div>
+
+  <div class="product-grid" id="allFoodsGrid">
+    <!-- All foods will be loaded here by JavaScript -->
+  </div>
+  
+  <div class="view-more-container">
+    <button class="view-more-btn" onclick="window.location.href='menu.html'">
+      <i class="fas fa-utensils"></i> View Complete Menu
+    </button>
+  </div>
+</section>
+
+<!-- Special Offers -->
+<section class="special-offers">
+  <div class="offers-container">
+    <div class="offer-card highlight">
+      <div class="offer-badge">Special Offer</div>
+      <h3>Family Feast Combo</h3>
+      <p>Get 2 Large Pizzas + 1 Burger + 2 Fries + 2 Sodas</p>
+      <p class="offer-price">Ksh 2,200 <span class="old-price">Ksh 2,800</span></p>
+      <button class="offer-btn" onclick="addToCart(100)">
+        <i class="fas fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+    
+    <div class="offer-card">
+      <h3>Free Delivery</h3>
+      <p>On all orders above Ksh 1,500</p>
+      <p class="offer-info"><i class="fas fa-truck"></i> Limited time offer</p>
+      <button class="offer-btn secondary" onclick="window.location.href='menu.html'">
+        <i class="fas fa-shopping-bag"></i> Order Now
+      </button>
+    </div>
+    
+    <div class="offer-card">
+      <h3>Weekend Special</h3>
+      <p>20% off on all pizzas every Saturday & Sunday</p>
+      <p class="offer-info"><i class="fas fa-calendar-alt"></i> Weekends only</p>
+      <button class="offer-btn secondary" onclick="window.location.href='menu.html'">
+        <i class="fas fa-pizza-slice"></i> View Pizzas
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+  <h2>How It Works</h2>
+  <div class="steps-container">
+    <div class="step">
+      <div class="step-number">1</div>
+      <i class="fas fa-utensils"></i>
+      <h3>Browse Menu</h3>
+      <p>Choose from our wide variety of delicious foods</p>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <i class="fas fa-cart-plus"></i>
+      <h3>Add to Cart</h3>
+      <p>Select your favorite items and add them to your cart</p>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <i class="fas fa-credit-card"></i>
+      <h3>Secure Payment</h3>
+      <p>Pay safely online with M-Pesa or credit card</p>
+    </div>
+    <div class="step">
+      <div class="step-number">4</div>
+      <i class="fas fa-truck"></i>
+      <h3>Fast Delivery</h3>
+      <p>Get your food delivered hot and fresh in 30 minutes</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <h2>What Our Customers Say</h2>
+  <div class="testimonials-container">
+    <div class="testimonial-card">
+      <div class="testimonial-rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <p>"The best burgers in town! Fast delivery and always hot."</p>
+      <div class="testimonial-author">
+        <strong>John M.</strong>
+        <span>Nairobi</span>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </div>
+      <p>"Family meals are perfect for our weekend dinners. Great value!"</p>
+      <div class="testimonial-author">
+        <strong>Sarah W.</strong>
+        <span>Westlands</span>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <p>"Consistently delicious food. My go-to for quick meals."</p>
+      <div class="testimonial-author">
+        <strong>David K.</strong>
+        <span>Karen</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>FastFoodExpress</h3>
+      <p>Fresh • Fast • Delivered</p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h3>Contact Info</h3>
+      <p><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+      <p><i class="fas fa-phone"></i> +254 712 345 678</p>
+      <p><i class="fas fa-envelope"></i> info@fastfoodexpress.co.ke</p>
+      <p><i class="fas fa-clock"></i> 8:00 AM - 11:00 PM Daily</p>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">Cart</a>
+      <a href="#">Track Order</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-section">
+      <h3>Payment Methods</h3>
+      <div class="payment-methods">
+        <i class="fab fa-cc-m-pesa"></i>
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-paypal"></i>
+      </div>
+      <p>Secure online payments</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 FastFoodExpress. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // Homepage specific JavaScript
+  document.addEventListener('DOMContentLoaded', function() {
+    // Load all foods on homepage
+    loadAllFoods();
+    
+    // Setup homepage search
+    const homeSearchInput = document.getElementById('homeSearchInput');
+    if (homeSearchInput) {
+      homeSearchInput.addEventListener('keyup', searchAllFoods);
+    }
+    
+    // Setup homepage category filters
+    document.querySelectorAll('.home-category-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const category = this.getAttribute('data-category');
+        filterAllFoods(category);
+      });
+    });
+    
+    // Setup header search
+    const headerSearch = document.getElementById('homeSearch');
+    if (headerSearch) {
+      headerSearch.addEventListener('keyup', function() {
+        if (this.value.trim()) {
+          window.location.href = 'menu.html?search=' + encodeURIComponent(this.value);
+        }
+      });
+    }
+  });
+  
+  function loadAllFoods() {
+    const container = document.getElementById('allFoodsGrid');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    products.forEach(p => {
+      container.innerHTML += `
+        <div class="card" onclick="viewProductDetail(${p.id})">
+          <img src="${p.img}" alt="${p.name}" onerror="this.src='res/default-food.jpg'">
+          <div class="card-category">${p.category.charAt(0).toUpperCase() + p.category.slice(1)}</div>
+          <h3>${p.name}</h3>
+          <p class="price">Ksh ${p.price}</p>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      `;
+    });
+  }
+  
+  function filterAllFoods(category) {
+    // Update active button
+    document.querySelectorAll('.home-category-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    const container = document.getElementById('allFoodsGrid');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    let filteredProducts = products;
+    
+    if (category !== 'all') {
+      filteredProducts = products.filter(p => p.category === category);
+    }
+    
+    if (filteredProducts.length === 0) {
+      container.innerHTML = `
+        <div class="no-results">
+          <i class="fas fa-search" style="font-size: 48px; color: #ddd;"></i>
+          <h3>No items found in this category</h3>
+          <p>Try another category or browse all foods</p>
+        </div>
+      `;
+      return;
+    }
+    
+    filteredProducts.forEach(p => {
+      container.innerHTML += `
+        <div class="card" onclick="viewProductDetail(${p.id})">
+          <img src="${p.img}" alt="${p.name}" onerror="this.src='res/default-food.jpg'">
+          <div class="card-category">${p.category.charAt(0).toUpperCase() + p.category.slice(1)}</div>
+          <h3>${p.name}</h3>
+          <p class="price">Ksh ${p.price}</p>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      `;
+    });
+  }
+  
+  function searchAllFoods() {
+    const query = document.getElementById('homeSearchInput').value.toLowerCase();
+    const container = document.getElementById('allFoodsGrid');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const filteredProducts = products.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query)
+    );
+    
+    if (filteredProducts.length === 0) {
+      container.innerHTML = `
+        <div class="no-results">
+          <i class="fas fa-search" style="font-size: 48px; color: #ddd;"></i>
+          <h3>No foods found</h3>
+          <p>Try a different search term</p>
+        </div>
+      `;
+      return;
+    }
+    
+    filteredProducts.forEach(p => {
+      container.innerHTML += `
+        <div class="card" onclick="viewProductDetail(${p.id})">
+          <img src="${p.img}" alt="${p.name}" onerror="this.src='res/default-food.jpg'">
+          <div class="card-category">${p.category.charAt(0).toUpperCase() + p.category.slice(1)}</div>
+          <h3>${p.name}</h3>
+          <p class="price">Ksh ${p.price}</p>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      `;
+    });
+  }
+</script>
+</body>
+</html>

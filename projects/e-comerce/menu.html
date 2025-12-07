@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu – FastFoodExpress</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">FastFoodExpress</div>
+  
+  <div class="header-actions">
+    <input type="text" class="search-bar" placeholder="Search meals..." id="homeSearch" />
+    <div class="cart-icon" onclick="window.location.href='cart.html'">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="menu.html" class="active">Menu</a>
+    <a href="cart.html">Cart</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html" class="active">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="#">Contact</a>
+  <div class="mobile-cart" onclick="window.location.href='cart.html'">
+    <i class="fas fa-shopping-cart"></i>
+    <span>View Cart (<span class="cart-count">0</span>)</span>
+  </div>
+</div>
+
+<section class="menu-page">
+  <div class="menu-header">
+    <h1>Our Delicious Menu</h1>
+    <p class="menu-subtitle">Freshly prepared meals for every craving</p>
+    
+    <div class="menu-search-container">
+      <input 
+        type="text" 
+        id="menuSearchInput" 
+        class="menu-search" 
+        placeholder="Search for meals, burgers, pizza..."
+      />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+    
+    <div class="category-filters">
+      <button class="category-btn active" data-category="all">All Items</button>
+      <button class="category-btn" data-category="burger">Burgers</button>
+      <button class="category-btn" data-category="pizza">Pizza</button>
+      <button class="category-btn" data-category="sides">Sides</button>
+      <button class="category-btn" data-category="drinks">Drinks</button>
+    </div>
+  </div>
+
+  <div class="menu-container">
+    <div class="product-grid" id="productList">
+      <!-- Products will be loaded here by JavaScript -->
+    </div>
+    
+    <div class="menu-sidebar">
+      <div class="sidebar-card">
+        <h3><i class="fas fa-fire"></i> Today's Special</h3>
+        <div class="special-item">
+          <img src="res/double_burger.jpg" alt="Special Burger" onerror="this.src='res/default-food.jpg'">
+          <h4>Double Cheeseburger</h4>
+          <p class="price">Ksh 550 <span class="old-price">Ksh 650</span></p>
+          <button class="cta-btn" onclick="addSpecialToCart()">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="sidebar-card">
+        <h3><i class="fas fa-shipping-fast"></i> Delivery Info</h3>
+        <p><i class="fas fa-clock"></i> 30-45 min delivery</p>
+        <p><i class="fas fa-truck"></i> Free delivery on orders over Ksh 1500</p>
+        <p><i class="fas fa-map-marker-alt"></i> Nairobi & surrounding areas</p>
+      </div>
+      
+      <div class="sidebar-card">
+        <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+        <div id="cartPreview">
+          <p>Your cart is empty</p>
+        </div>
+        <button class="view-cart-btn" onclick="window.location.href='cart.html'">
+          <i class="fas fa-shopping-cart"></i> View Cart & Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu-banner">
+  <div class="banner-content">
+    <h2>Family Meal Deals</h2>
+    <p>Save up to 20% on family combos</p>
+    <button class="banner-btn" onclick="document.querySelector('.family-deals').scrollIntoView({behavior: 'smooth'})">
+      View Deals
+    </button>
+  </div>
+</section>
+
+<section class="family-deals" id="familyDeals">
+  <h2>Family Meal Deals</h2>
+  <div class="deals-grid" id="dealsGrid">
+    <!-- Meal deals will be loaded here by JavaScript -->
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>FastFoodExpress</h3>
+      <p>Fresh • Fast • Delivered</p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h3>Contact Info</h3>
+      <p><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+      <p><i class="fas fa-phone"></i> +254 712 345 678</p>
+      <p><i class="fas fa-envelope"></i> info@fastfoodexpress.co.ke</p>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">Cart</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-section">
+      <h3>Opening Hours</h3>
+      <p>Mon-Fri: 8:00 AM - 11:00 PM</p>
+      <p>Sat-Sun: 9:00 AM - 12:00 AM</p>
+      <p>24/7 Delivery Available</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 FastFoodExpress. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
