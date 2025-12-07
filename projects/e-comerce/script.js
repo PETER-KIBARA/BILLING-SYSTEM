@@ -89,7 +89,7 @@ const mealDeals = [
     price: 2200,
     items: ["2 Large Pizzas", "1 Burger", "2 Fries", "2 Sodas"],
     oldPrice: 2800,
-    img: "res/family_comb.jpeg"
+    img: "res/family_combo.jpeg"
   },
   {
     id: 101,
@@ -97,7 +97,7 @@ const mealDeals = [
     price: 2800,
     items: ["4 Beef Burgers", "4 Fries", "4 Milkshakes"],
     oldPrice: 3400,
-    img: "res/burger_combo.jpg"
+    img: "res/burger_combo.png"
   },
   {
     id: 102,
@@ -105,7 +105,7 @@ const mealDeals = [
     price: 3000,
     items: ["3 Medium Pizzas", "Chicken Wings", "Garlic Bread", "2 Liter Soda"],
     oldPrice: 3600,
-    img: "res/pizza_party.jpg"
+    img: "res/pizza_party.png"
   }
 ];
 
@@ -295,7 +295,7 @@ function addToCart(productId, quantity = 1, instructions = '') {
       id: mealDeal.id,
       name: mealDeal.name,
       price: mealDeal.price,
-      img: mealDeal.img || 'res/deal.jpg',
+      img: mealDeal.img || 'res/deal.jpeg',
       quantity: quantity,
       instructions: "Family Meal Deal",
       type: 'mealDeal'
