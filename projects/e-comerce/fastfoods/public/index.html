@@ -24,6 +24,7 @@
     <a href="index.html" class="active">Home</a>
     <a href="menu.html">Menu</a>
     <a href="cart.html">Cart</a>
+    <a href="login.html" id="navLoginLink">Login</a>
     <a href="#">Contact</a>
   </nav>
 
@@ -34,6 +35,7 @@
   <a href="index.html" class="active">Home</a>
   <a href="menu.html">Menu</a>
   <a href="cart.html">Cart</a>
+  <a href="login.html" id="mobileNavLoginLink">Login</a>
   <a href="#">Contact</a>
   <div class="mobile-cart" onclick="window.location.href='cart.html'">
     <i class="fas fa-shopping-cart"></i>
@@ -271,6 +273,134 @@
     <p>&copy; 2024 FastFoodExpress. All rights reserved.</p>
   </div>
 </footer>
+
+<!-- Registration Modal -->
+<div id="registrationModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+      <span class="close-modal" onclick="closeRegistrationModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Secure Registration</span>
+        <div class="ssl-badge">
+          <i class="fas fa-shield-alt"></i> SSL Encrypted
+        </div>
+      </div>
+      
+      <form id="registrationForm" onsubmit="handleRegistration(event)">
+        <div class="form-group">
+          <label for="regFullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="regFullName" name="fullName" required>
+          <span class="error-message" id="regFullNameError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="regEmail" name="email" required>
+          <span class="error-message" id="regEmailError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regPhone">Phone Number <span class="required">*</span></label>
+          <input type="tel" id="regPhone" name="phone" placeholder="+254 712 345 678" required>
+          <span class="error-message" id="regPhoneError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regPassword">Password <span class="required">*</span></label>
+          <div class="password-input-wrapper">
+            <input type="password" id="regPassword" name="password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regPassword', this)"></i>
+          </div>
+          <small class="password-hint">Must be at least 8 characters with letters and numbers</small>
+          <span class="error-message" id="regPasswordError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regConfirmPassword">Confirm Password <span class="required">*</span></label>
+          <div class="password-input-wrapper">
+            <input type="password" id="regConfirmPassword" name="confirmPassword" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regConfirmPassword', this)"></i>
+          </div>
+          <span class="error-message" id="regConfirmPasswordError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regAddress">Delivery Address <span class="required">*</span></label>
+          <textarea id="regAddress" name="address" rows="3" required></textarea>
+          <span class="error-message" id="regAddressError"></span>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="regTerms" name="terms" required>
+          <label for="regTerms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+          <span class="error-message" id="regTermsError"></span>
+        </div>
+        
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-user-check"></i> Create Account
+        </button>
+      </form>
+      
+      <div class="modal-footer">
+        <p>Already have an account? <a href="#" onclick="closeRegistrationModal(); openLoginModal();">Login here</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+      <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Secure Login</span>
+        <div class="ssl-badge">
+          <i class="fas fa-shield-alt"></i> SSL Encrypted
+        </div>
+      </div>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="loginEmail" name="email" required>
+          <span class="error-message" id="loginEmailError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword">Password <span class="required">*</span></label>
+          <div class="password-input-wrapper">
+            <input type="password" id="loginPassword" name="password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('loginPassword', this)"></i>
+          </div>
+          <span class="error-message" id="loginPasswordError"></span>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="rememberMe" name="rememberMe">
+          <label for="rememberMe">Remember me</label>
+        </div>
+        
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
+      
+      <div class="modal-footer">
+        <p>Don't have an account? <a href="#" onclick="closeLoginModal(); openRegistrationModal();">Register here</a></p>
+        <p><a href="#">Forgot Password?</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 <script>

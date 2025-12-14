@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart – FastFoodExpress</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">FastFoodExpress</div>
+  
+  <div class="header-actions">
+    <div class="cart-icon" onclick="window.location.href='cart.html'">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cart.html">Cart</a>
+    <a href="login.html" id="navLoginLink">Login</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="login.html" id="mobileNavLoginLink">Login</a>
+  <a href="#">Contact</a>
+</div>
+
+<section class="cart-page">
+  <h1>Your Shopping Cart</h1>
+  
+  <div class="cart-container">
+    <div class="cart-items" id="cartItems">
+      <!-- Cart items will be loaded here -->
+    </div>
+    
+    <div class="cart-summary">
+      <h2>Order Summary</h2>
+      <div class="summary-details">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="subtotal">Ksh 0</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery Fee:</span>
+          <span id="deliveryFee">Ksh 150</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span id="totalAmount">Ksh 150</span>
+        </div>
+      </div>
+      
+      <div id="authSection">
+        <p style="text-align: center; margin-bottom: 15px; color: #666;">
+          <a href="#" onclick="event.preventDefault(); openLoginModal();" style="color: #ff7b00; text-decoration: none; font-weight: 600;">Login</a> 
+          or 
+          <a href="#" onclick="event.preventDefault(); openRegistrationModal();" style="color: #ff7b00; text-decoration: none; font-weight: 600;">Register</a> 
+          for faster checkout
+        </p>
+      </div>
+      
+      <button class="checkout-btn" onclick="openCheckoutModal()">
+        <i class="fas fa-lock"></i> Proceed to Checkout
+      </button>
+      
+      <button class="continue-shopping" onclick="window.location.href='menu.html'">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Registration Modal -->
+<div id="registrationModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+      <span class="close-modal" onclick="closeRegistrationModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Secure Registration</span>
+        <div class="ssl-badge">
+          <i class="fas fa-shield-alt"></i> SSL Encrypted
+        </div>
+      </div>
+      
+      <form id="registrationForm" onsubmit="handleRegistration(event)">
+        <div class="form-group">
+          <label for="regFullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="regFullName" name="fullName" required>
+          <span class="error-message" id="regFullNameError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="regEmail" name="email" required>
+          <span class="error-message" id="regEmailError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regPhone">Phone Number <span class="required">*</span></label>
+          <input type="tel" id="regPhone" name="phone" placeholder="+254 712 345 678" required>
+          <span class="error-message" id="regPhoneError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regPassword">Password <span class="required">*</span></label>
+          <div class="password-input-wrapper">
+            <input type="password" id="regPassword" name="password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regPassword', this)"></i>
+          </div>
+          <small class="password-hint">Must be at least 8 characters with letters and numbers</small>
+          <span class="error-message" id="regPasswordError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regConfirmPassword">Confirm Password <span class="required">*</span></label>
+          <div class="password-input-wrapper">
+            <input type="password" id="regConfirmPassword" name="confirmPassword" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regConfirmPassword', this)"></i>
+          </div>
+          <span class="error-message" id="regConfirmPasswordError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="regAddress">Delivery Address <span class="required">*</span></label>
+          <textarea id="regAddress" name="address" rows="3" required></textarea>
+          <span class="error-message" id="regAddressError"></span>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="regTerms" name="terms" required>
+          <label for="regTerms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+          <span class="error-message" id="regTermsError"></span>
+        </div>
+        
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-user-check"></i> Create Account & Continue
+        </button>
+      </form>
+      
+      <div class="modal-footer">
+        <p>Already have an account? <a href="#" onclick="closeRegistrationModal(); openLoginModal();">Login here</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+      <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Secure Login</span>
+        <div class="ssl-badge">
+          <i class="fas fa-shield-alt"></i> SSL Encrypted
+        </div>
+      </div>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="loginEmail" name="email" required>
+          <span class="error-message" id="loginEmailError"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword">Password <span class="required">*</span></label>
+          <div class="password-input-wrapper">
+            <input type="password" id="loginPassword" name="password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('loginPassword', this)"></i>
+          </div>
+          <span class="error-message" id="loginPasswordError"></span>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="rememberMe" name="rememberMe">
+          <label for="rememberMe">Remember me</label>
+        </div>
+        
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-sign-in-alt"></i> Login & Continue
+        </button>
+      </form>
+      
+      <div class="modal-footer">
+        <p>Don't have an account? <a href="#" onclick="closeLoginModal(); openRegistrationModal();">Register here</a></p>
+        <p><a href="#">Forgot Password?</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal">
+  <div class="modal-content checkout-modal">
+    <div class="modal-header">
+      <h2><i class="fas fa-shopping-cart"></i> Secure Checkout</h2>
+      <span class="close-modal" onclick="closeCheckoutModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Secure Payment</span>
+        <div class="ssl-badge">
+          <i class="fas fa-shield-alt"></i> SSL Encrypted
+        </div>
+      </div>
+      
+      <!-- Order Summary in Modal -->
+      <div class="checkout-summary">
+        <h3>Order Summary</h3>
+        <div id="checkoutItemsList"></div>
+        <div class="checkout-totals">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="checkoutSubtotal">Ksh 0</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery Fee:</span>
+            <span id="checkoutDeliveryFee">Ksh 150</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span id="checkoutTotal">Ksh 150</span>
+          </div>
+        </div>
+      </div>
+      
+      <form id="checkoutForm" onsubmit="handleCheckout(event)">
+        <!-- Customer Information -->
+        <div class="form-section">
+          <h3><i class="fas fa-user"></i> Customer Information</h3>
+          
+          <div class="form-group">
+            <label for="checkoutFullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="checkoutFullName" name="fullName" required>
+            <span class="error-message" id="checkoutFullNameError"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="checkoutEmail">Email Address <span class="required">*</span></label>
+            <input type="email" id="checkoutEmail" name="email" required>
+            <span class="error-message" id="checkoutEmailError"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="checkoutPhone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="checkoutPhone" name="phone" placeholder="+254 712 345 678" required>
+            <span class="error-message" id="checkoutPhoneError"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="checkoutAddress">Delivery Address <span class="required">*</span></label>
+            <textarea id="checkoutAddress" name="address" rows="3" required></textarea>
+            <span class="error-message" id="checkoutAddressError"></span>
+          </div>
+        </div>
+        
+        <!-- Payment Method -->
+        <div class="form-section">
+          <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
+          
+          <div class="payment-methods-selection">
+            <div class="payment-option">
+              <input type="radio" id="paymentMpesa" name="paymentMethod" value="mpesa" checked required>
+              <label for="paymentMpesa" class="payment-label">
+                <i class="fab fa-cc-m-pesa"></i>
+                <div>
+                  <strong>M-Pesa</strong>
+                  <small>Pay via M-Pesa mobile money</small>
+                </div>
+              </label>
+            </div>
+            
+            <div class="payment-option">
+              <input type="radio" id="paymentVisa" name="paymentMethod" value="visa" required>
+              <label for="paymentVisa" class="payment-label">
+                <i class="fab fa-cc-visa"></i>
+                <div>
+                  <strong>Visa</strong>
+                  <small>Pay with Visa card</small>
+                </div>
+              </label>
+            </div>
+            
+            <div class="payment-option">
+              <input type="radio" id="paymentMastercard" name="paymentMethod" value="mastercard" required>
+              <label for="paymentMastercard" class="payment-label">
+                <i class="fab fa-cc-mastercard"></i>
+                <div>
+                  <strong>Mastercard</strong>
+                  <small>Pay with Mastercard</small>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <!-- M-Pesa Payment Details -->
+          <div id="mpesaDetails" class="payment-details">
+            <div class="form-group">
+              <label for="mpesaPhone">M-Pesa Phone Number <span class="required">*</span></label>
+              <input type="tel" id="mpesaPhone" name="mpesaPhone" placeholder="254712345678">
+              <span class="error-message" id="mpesaPhoneError"></span>
+            </div>
+          </div>
+          
+          <!-- Card Payment Details -->
+          <div id="cardDetails" class="payment-details" style="display: none;">
+            <div class="form-group">
+              <label for="cardNumber">Card Number <span class="required">*</span></label>
+              <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+              <span class="error-message" id="cardNumberError"></span>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cardExpiry">Expiry Date <span class="required">*</span></label>
+                <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5">
+                <span class="error-message" id="cardExpiryError"></span>
+              </div>
+              
+              <div class="form-group">
+                <label for="cardCVV">CVV <span class="required">*</span></label>
+                <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4">
+                <span class="error-message" id="cardCVVError"></span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="cardName">Cardholder Name <span class="required">*</span></label>
+              <input type="text" id="cardName" name="cardName" placeholder="John Doe">
+              <span class="error-message" id="cardNameError"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="checkoutTerms" name="terms" required>
+          <label for="checkoutTerms">I agree to the <a href="#">Terms & Conditions</a> and confirm that my information is correct</label>
+          <span class="error-message" id="checkoutTermsError"></span>
+        </div>
+        
+        <button type="submit" class="submit-btn checkout-submit">
+          <i class="fas fa-lock"></i> Complete Secure Payment
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

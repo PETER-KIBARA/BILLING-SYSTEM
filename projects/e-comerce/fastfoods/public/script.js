@@ -646,35 +646,576 @@ function searchProducts() {
 // CHECKOUT AND ORDER FUNCTIONS
 // ============================================
 
-// Proceed to checkout
+// Proceed to checkout (legacy function - now opens modal)
 function proceedToCheckout() {
+  openCheckoutModal();
+}
+
+// ============================================
+// MODAL FUNCTIONS (Week 6: Secure Forms)
+// ============================================
+
+// Open checkout modal
+function openCheckoutModal() {
   if (cart.length === 0) {
     showNotification('Your cart is empty! Add some items first.');
     return;
   }
   
+  // Check if user is logged in (Firebase or localStorage)
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const hasFirebaseAuth = window.firebaseAuth && window.firebaseAuth.currentUser;
+  
+  if (!isLoggedIn && !hasFirebaseAuth) {
+    // Redirect to login page with redirect parameter
+    const currentUrl = window.location.href;
+    window.location.href = `login.html?redirect=${encodeURIComponent(currentUrl)}`;
+    return;
+  }
+  
+  const modal = document.getElementById('checkoutModal');
+  if (!modal) return;
+  
+  // Load checkout items
+  loadCheckoutItems();
+  
+  // Update totals
+  updateCheckoutTotals();
+  
+  // Pre-fill form if user data exists
+  prefillCheckoutForm();
+  
+  // Show modal
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  
+  // Setup payment method change handler
+  setupPaymentMethodHandlers();
+}
+
+// Close checkout modal
+function closeCheckoutModal() {
+  const modal = document.getElementById('checkoutModal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+}
+
+// Open registration modal
+function openRegistrationModal() {
+  const modal = document.getElementById('registrationModal');
+  if (modal) {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+// Close registration modal
+function closeRegistrationModal() {
+  const modal = document.getElementById('registrationModal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    // Reset form
+    document.getElementById('registrationForm').reset();
+    clearFormErrors('registrationForm');
+  }
+}
+
+// Open login modal
+function openLoginModal() {
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+// Close login modal
+function closeLoginModal() {
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    // Reset form
+    document.getElementById('loginForm').reset();
+    clearFormErrors('loginForm');
+  }
+}
+
+// Load checkout items in modal
+function loadCheckoutItems() {
+  const container = document.getElementById('checkoutItemsList');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (cart.length === 0) {
+    container.innerHTML = '<p>Your cart is empty</p>';
+    return;
+  }
+  
+  cart.forEach(item => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'checkout-item';
+    itemDiv.innerHTML = `
+      <span class="checkout-item-name">${item.name} x${item.quantity}</span>
+      <span class="checkout-item-price">Ksh ${item.price * item.quantity}</span>
+    `;
+    container.appendChild(itemDiv);
+  });
+}
+
+// Update checkout totals in modal
+function updateCheckoutTotals() {
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const deliveryFee = 150;
+  const total = subtotal + deliveryFee;
+  
+  const subtotalEl = document.getElementById('checkoutSubtotal');
+  const deliveryFeeEl = document.getElementById('checkoutDeliveryFee');
+  const totalEl = document.getElementById('checkoutTotal');
+  
+  if (subtotalEl) subtotalEl.textContent = `Ksh ${subtotal}`;
+  if (deliveryFeeEl) deliveryFeeEl.textContent = `Ksh ${deliveryFee}`;
+  if (totalEl) totalEl.textContent = `Ksh ${total}`;
+}
+
+// Setup payment method change handlers
+function setupPaymentMethodHandlers() {
+  const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+  const mpesaDetails = document.getElementById('mpesaDetails');
+  const cardDetails = document.getElementById('cardDetails');
+  
+  paymentMethods.forEach(method => {
+    method.addEventListener('change', function() {
+      if (this.value === 'mpesa') {
+        mpesaDetails.style.display = 'block';
+        cardDetails.style.display = 'none';
+        // Clear card fields
+        document.getElementById('cardNumber').value = '';
+        document.getElementById('cardExpiry').value = '';
+        document.getElementById('cardCVV').value = '';
+        document.getElementById('cardName').value = '';
+      } else {
+        mpesaDetails.style.display = 'none';
+        cardDetails.style.display = 'block';
+        // Clear M-Pesa field
+        document.getElementById('mpesaPhone').value = '';
+      }
+    });
+  });
+}
+
+// Format card number
+function formatCardNumber(input) {
+  let value = input.value.replace(/\s/g, '');
+  let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+  input.value = formattedValue;
+}
+
+// Format card expiry
+function formatCardExpiry(input) {
+  let value = input.value.replace(/\D/g, '');
+  if (value.length >= 2) {
+    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+  }
+  input.value = value;
+}
+
+// Toggle password visibility
+function togglePasswordVisibility(inputId, icon) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
+
+// Clear form errors
+function clearFormErrors(formId) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+  
+  const errorMessages = form.querySelectorAll('.error-message');
+  errorMessages.forEach(error => {
+    error.textContent = '';
+  });
+  
+  const errorInputs = form.querySelectorAll('.error');
+  errorInputs.forEach(input => {
+    input.classList.remove('error');
+  });
+}
+
+// Show field error
+function showFieldError(fieldId, message) {
+  const field = document.getElementById(fieldId);
+  const errorEl = document.getElementById(fieldId + 'Error');
+  
+  if (field) {
+    field.classList.add('error');
+  }
+  
+  if (errorEl) {
+    errorEl.textContent = message;
+  }
+}
+
+// Clear field error
+function clearFieldError(fieldId) {
+  const field = document.getElementById(fieldId);
+  const errorEl = document.getElementById(fieldId + 'Error');
+  
+  if (field) {
+    field.classList.remove('error');
+  }
+  
+  if (errorEl) {
+    errorEl.textContent = '';
+  }
+}
+
+// Validate email
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// Validate phone (Kenyan format)
+function validatePhone(phone) {
+  const cleaned = phone.replace(/\D/g, '');
+  return cleaned.length >= 9 && (cleaned.startsWith('254') || cleaned.startsWith('0') || cleaned.length === 9);
+}
+
+// Validate password
+function validatePassword(password) {
+  // At least 8 characters, contains letters and numbers
+  return password.length >= 8 && /[a-zA-Z]/.test(password) && /\d/.test(password);
+}
+
+// Validate card number
+function validateCardNumber(cardNumber) {
+  const cleaned = cardNumber.replace(/\s/g, '');
+  return /^\d{13,19}$/.test(cleaned);
+}
+
+// Validate card expiry
+function validateCardExpiry(expiry) {
+  const match = expiry.match(/^(\d{2})\/(\d{2})$/);
+  if (!match) return false;
+  
+  const month = parseInt(match[1]);
+  const year = parseInt('20' + match[2]);
+  const now = new Date();
+  const expiryDate = new Date(year, month - 1);
+  
+  return month >= 1 && month <= 12 && expiryDate > now;
+}
+
+// Validate CVV
+function validateCVV(cvv) {
+  return /^\d{3,4}$/.test(cvv);
+}
+
+// Handle registration form submission
+function handleRegistration(event) {
+  event.preventDefault();
+  clearFormErrors('registrationForm');
+  
+  const form = event.target;
+  let isValid = true;
+  
+  // Validate full name
+  const fullName = document.getElementById('regFullName').value.trim();
+  if (!fullName || fullName.length < 2) {
+    showFieldError('regFullName', 'Please enter your full name');
+    isValid = false;
+  }
+  
+  // Validate email
+  const email = document.getElementById('regEmail').value.trim();
+  if (!email || !validateEmail(email)) {
+    showFieldError('regEmail', 'Please enter a valid email address');
+    isValid = false;
+  }
+  
+  // Validate phone
+  const phone = document.getElementById('regPhone').value.trim();
+  if (!phone || !validatePhone(phone)) {
+    showFieldError('regPhone', 'Please enter a valid phone number');
+    isValid = false;
+  }
+  
+  // Validate password
+  const password = document.getElementById('regPassword').value;
+  if (!password || !validatePassword(password)) {
+    showFieldError('regPassword', 'Password must be at least 8 characters with letters and numbers');
+    isValid = false;
+  }
+  
+  // Validate password confirmation
+  const confirmPassword = document.getElementById('regConfirmPassword').value;
+  if (!confirmPassword || password !== confirmPassword) {
+    showFieldError('regConfirmPassword', 'Passwords do not match');
+    isValid = false;
+  }
+  
+  // Validate address
+  const address = document.getElementById('regAddress').value.trim();
+  if (!address || address.length < 10) {
+    showFieldError('regAddress', 'Please enter a complete delivery address');
+    isValid = false;
+  }
+  
+  // Validate terms
+  const terms = document.getElementById('regTerms').checked;
+  if (!terms) {
+    showFieldError('regTerms', 'You must agree to the terms and conditions');
+    isValid = false;
+  }
+  
+  if (!isValid) {
+    return;
+  }
+  
+  // Save user data (in real app, send to server)
+  const userData = {
+    fullName,
+    email,
+    phone,
+    address,
+    registeredAt: new Date().toISOString()
+  };
+  
+  localStorage.setItem('userData', JSON.stringify(userData));
+  localStorage.setItem('isLoggedIn', 'true');
+  
+  showNotification('Account created successfully!');
+  
+  setTimeout(() => {
+    closeRegistrationModal();
+    // Pre-fill checkout form if on cart page
+    if (document.getElementById('checkoutFullName')) {
+      document.getElementById('checkoutFullName').value = fullName;
+      document.getElementById('checkoutEmail').value = email;
+      document.getElementById('checkoutPhone').value = phone;
+      document.getElementById('checkoutAddress').value = address;
+    }
+  }, 1500);
+}
+
+// Handle login form submission
+function handleLogin(event) {
+  event.preventDefault();
+  clearFormErrors('loginForm');
+  
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  if (!email || !validateEmail(email)) {
+    showFieldError('loginEmail', 'Please enter a valid email address');
+    return;
+  }
+  
+  if (!password || password.length < 6) {
+    showFieldError('loginPassword', 'Please enter your password');
+    return;
+  }
+  
+  // In real app, verify credentials with server
+  // For demo, check if user exists in localStorage
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  
+  if (userData && userData.email === email) {
+    localStorage.setItem('isLoggedIn', 'true');
+    showNotification('Login successful!');
+    
+    setTimeout(() => {
+      closeLoginModal();
+      // Pre-fill checkout form if on cart page
+      if (document.getElementById('checkoutFullName')) {
+        document.getElementById('checkoutFullName').value = userData.fullName || '';
+        document.getElementById('checkoutEmail').value = userData.email || '';
+        document.getElementById('checkoutPhone').value = userData.phone || '';
+        document.getElementById('checkoutAddress').value = userData.address || '';
+      }
+    }, 1500);
+  } else {
+    showFieldError('loginEmail', 'Invalid email or password');
+    showFieldError('loginPassword', 'Invalid email or password');
+  }
+}
+
+// Handle checkout form submission
+function handleCheckout(event) {
+  event.preventDefault();
+  clearFormErrors('checkoutForm');
+  
+  let isValid = true;
+  
+  // Validate customer information
+  const fullName = document.getElementById('checkoutFullName').value.trim();
+  if (!fullName || fullName.length < 2) {
+    showFieldError('checkoutFullName', 'Please enter your full name');
+    isValid = false;
+  }
+  
+  const email = document.getElementById('checkoutEmail').value.trim();
+  if (!email || !validateEmail(email)) {
+    showFieldError('checkoutEmail', 'Please enter a valid email address');
+    isValid = false;
+  }
+  
+  const phone = document.getElementById('checkoutPhone').value.trim();
+  if (!phone || !validatePhone(phone)) {
+    showFieldError('checkoutPhone', 'Please enter a valid phone number');
+    isValid = false;
+  }
+  
+  const address = document.getElementById('checkoutAddress').value.trim();
+  if (!address || address.length < 10) {
+    showFieldError('checkoutAddress', 'Please enter a complete delivery address');
+    isValid = false;
+  }
+  
+  // Validate payment method
+  const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+  if (!paymentMethod) {
+    showNotification('Please select a payment method');
+    isValid = false;
+  }
+  
+  // Validate payment details based on method
+  if (paymentMethod) {
+    if (paymentMethod.value === 'mpesa') {
+      const mpesaPhone = document.getElementById('mpesaPhone').value.trim();
+      if (!mpesaPhone || !validatePhone(mpesaPhone)) {
+        showFieldError('mpesaPhone', 'Please enter a valid M-Pesa phone number');
+        isValid = false;
+      }
+    } else {
+      // Validate card details
+      const cardNumber = document.getElementById('cardNumber').value.trim();
+      if (!cardNumber || !validateCardNumber(cardNumber)) {
+        showFieldError('cardNumber', 'Please enter a valid card number');
+        isValid = false;
+      }
+      
+      const cardExpiry = document.getElementById('cardExpiry').value.trim();
+      if (!cardExpiry || !validateCardExpiry(cardExpiry)) {
+        showFieldError('cardExpiry', 'Please enter a valid expiry date (MM/YY)');
+        isValid = false;
+      }
+      
+      const cardCVV = document.getElementById('cardCVV').value.trim();
+      if (!cardCVV || !validateCVV(cardCVV)) {
+        showFieldError('cardCVV', 'Please enter a valid CVV');
+        isValid = false;
+      }
+      
+      const cardName = document.getElementById('cardName').value.trim();
+      if (!cardName || cardName.length < 2) {
+        showFieldError('cardName', 'Please enter cardholder name');
+        isValid = false;
+      }
+    }
+  }
+  
+  // Validate terms
+  const terms = document.getElementById('checkoutTerms').checked;
+  if (!terms) {
+    showFieldError('checkoutTerms', 'You must agree to the terms and conditions');
+    isValid = false;
+  }
+  
+  if (!isValid) {
+    return;
+  }
+  
+  // Save order to user's order history
+  const orderId = Date.now();
+  const order = {
+    orderId: orderId,
+    items: cart,
+    customer: {
+      fullName,
+      email,
+      phone,
+      address
+    },
+    subtotal,
+    deliveryFee,
+    total,
+    paymentMethod: paymentMethod.value,
+    status: 'pending',
+    timestamp: new Date().toISOString()
+  };
+  
+  // Save to order history
+  const userOrders = JSON.parse(localStorage.getItem('userOrders') || '[]');
+  userOrders.push(order);
+  localStorage.setItem('userOrders', JSON.stringify(userOrders));
+  
+  // Process payment
+  processPayment(paymentMethod.value, {
+    fullName,
+    email,
+    phone,
+    address,
+    paymentMethod: paymentMethod.value
+  });
+}
+
+// Process payment
+function processPayment(method, customerData) {
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const deliveryFee = 150;
+  const total = subtotal + deliveryFee;
+  
   // Store order details
   const order = {
     items: cart,
-    subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-    deliveryFee: 150,
-    total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 150,
+    customer: customerData,
+    subtotal,
+    deliveryFee,
+    total,
+    paymentMethod: method,
+    status: 'pending',
     timestamp: new Date().toISOString()
   };
   
   localStorage.setItem('currentOrder', JSON.stringify(order));
   
-  // For demo purposes - in real app, redirect to payment page
-  showNotification(`Order total: Ksh ${order.total}\nRedirecting to payment...`);
+  // Show processing message
+  const submitBtn = document.querySelector('.checkout-submit');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
   
   // Simulate payment processing
   setTimeout(() => {
-    if (confirm('Payment Successful!\n\nYour order has been placed.\nClear cart?')) {
-      cart = [];
-      saveCart();
-      window.location.href = 'index.html';
-    }
-  }, 1000);
+    // In real app, this would communicate with payment gateway
+    showNotification(`Payment successful! Order total: Ksh ${total}`);
+    
+    setTimeout(() => {
+      if (confirm('Payment Successful!\n\nYour order has been placed.\nOrder ID: ' + Date.now() + '\n\nClear cart and return to homepage?')) {
+        cart = [];
+        saveCart();
+        closeCheckoutModal();
+        window.location.href = 'index.html';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    }, 1000);
+  }, 2000);
 }
 
 // ============================================
@@ -689,8 +1230,8 @@ function toggleMenu() {
   }
 }
 
-// Show notification
-function showNotification(message) {
+// Show notification (enhanced with types)
+function showNotification(message, type = 'success') {
   // Remove existing notification
   const existingNotification = document.querySelector('.notification');
   if (existingNotification) {
@@ -699,56 +1240,43 @@ function showNotification(message) {
   
   // Create new notification
   const notification = document.createElement('div');
-  notification.className = 'notification';
+  notification.className = `notification ${type}`;
+  
+  // Add icon based on type
+  let icon = '';
+  switch(type) {
+    case 'success':
+      icon = '<i class="fas fa-check-circle"></i>';
+      break;
+    case 'error':
+      icon = '<i class="fas fa-exclamation-circle"></i>';
+      break;
+    case 'info':
+      icon = '<i class="fas fa-info-circle"></i>';
+      break;
+    case 'warning':
+      icon = '<i class="fas fa-exclamation-triangle"></i>';
+      break;
+    default:
+      icon = '<i class="fas fa-bell"></i>';
+  }
+  
   notification.innerHTML = `
+    ${icon}
     <span>${message}</span>
     <button onclick="this.parentElement.remove()">&times;</button>
   `;
   
-  // Add styles if not already present
-  if (!document.querySelector('#notification-styles')) {
-    const style = document.createElement('style');
-    style.id = 'notification-styles';
-    style.textContent = `
-      .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #28a745;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 5px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        animation: slideIn 0.3s ease;
-      }
-      .notification button {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 0;
-      }
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-  
   document.body.appendChild(notification);
   
-  // Auto-remove after 3 seconds
+  // Auto-remove after appropriate time
+  const duration = type === 'error' ? 5000 : 3000;
   setTimeout(() => {
     if (notification.parentElement) {
-      notification.remove();
+      notification.style.animation = 'slideInRight 0.3s ease reverse';
+      setTimeout(() => notification.remove(), 300);
     }
-  }, 3000);
+  }, duration);
 }
 
 // ============================================
@@ -776,10 +1304,26 @@ function initializePage() {
     // Setup category filter buttons
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', function() {
-        const category = this.getAttribute('onclick').match(/'([^']+)'/)[1];
-        filterProducts(category);
+        const category = this.getAttribute('data-category');
+        if (category) {
+          filterProducts(category);
+        }
       });
     });
+    
+    // Setup search
+    const menuSearchInput = document.getElementById('menuSearchInput');
+    if (menuSearchInput) {
+      menuSearchInput.addEventListener('keyup', searchProducts);
+    }
+    
+    // Check for search query in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search');
+    if (searchQuery && menuSearchInput) {
+      menuSearchInput.value = searchQuery;
+      searchProducts();
+    }
   }
   
   // Product detail page
@@ -790,7 +1334,56 @@ function initializePage() {
   // Cart page
   if (path.includes("cart.html")) {
     loadCart();
+    
+    // Setup card number formatting
+    const cardNumberInput = document.getElementById('cardNumber');
+    if (cardNumberInput) {
+      cardNumberInput.addEventListener('input', function() {
+        formatCardNumber(this);
+      });
+    }
+    
+    // Setup card expiry formatting
+    const cardExpiryInput = document.getElementById('cardExpiry');
+    if (cardExpiryInput) {
+      cardExpiryInput.addEventListener('input', function() {
+        formatCardExpiry(this);
+      });
+    }
+    
+    // Setup CVV input (numbers only)
+    const cardCVVInput = document.getElementById('cardCVV');
+    if (cardCVVInput) {
+      cardCVVInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '');
+      });
+    }
+    
+    // Setup phone number formatting
+    const phoneInputs = document.querySelectorAll('input[type="tel"]');
+    phoneInputs.forEach(input => {
+      input.addEventListener('input', function() {
+        // Allow only numbers and + for phone
+        this.value = this.value.replace(/[^\d+]/g, '');
+      });
+    });
+    
+    // Pre-fill checkout form if user is logged in
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    if (isLoggedIn && userData) {
+      // Pre-fill when modal opens
+      const checkoutBtn = document.querySelector('.checkout-btn');
+      if (checkoutBtn) {
+        const originalOnclick = checkoutBtn.getAttribute('onclick');
+        checkoutBtn.setAttribute('onclick', originalOnclick + '; prefillCheckoutForm();');
+      }
+    }
   }
+  
+  // Setup modal close on outside click
+  setupModalCloseHandlers();
   
   // Close mobile menu when clicking outside
   document.addEventListener('click', function(event) {
@@ -804,6 +1397,56 @@ function initializePage() {
       mobileMenu.style.display = 'none';
     }
   });
+}
+
+// Setup modal close handlers
+function setupModalCloseHandlers() {
+  // Close modal when clicking outside
+  window.addEventListener('click', function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+      if (event.target === modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      const openModal = document.querySelector('.modal.show');
+      if (openModal) {
+        openModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+  });
+}
+
+// Pre-fill checkout form with user data
+function prefillCheckoutForm() {
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+  
+  // Get default address or first address
+  const defaultAddress = addresses.find(addr => addr.isDefault) || addresses[0];
+  
+  setTimeout(() => {
+    if (document.getElementById('checkoutFullName')) {
+      document.getElementById('checkoutFullName').value = userData.displayName || userData.fullName || '';
+      document.getElementById('checkoutEmail').value = userData.email || '';
+      document.getElementById('checkoutPhone').value = userData.phoneNumber || userData.phone || '';
+      
+      // Use default address if available
+      if (defaultAddress) {
+        const fullAddress = `${defaultAddress.street}, ${defaultAddress.city}, ${defaultAddress.county}${defaultAddress.postalCode ? ', ' + defaultAddress.postalCode : ''}`;
+        document.getElementById('checkoutAddress').value = fullAddress;
+      } else {
+        document.getElementById('checkoutAddress').value = userData.address || '';
+      }
+    }
+  }, 100);
 }
 
 // Run initialization when page loads

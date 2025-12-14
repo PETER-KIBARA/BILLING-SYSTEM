@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - FastFood Express</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo" onclick="window.location.href='index.html'">FastFoodExpress</div>
+  
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cart.html">Cart</a>
+    <a href="login.html" class="active">Login</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="login.html" class="active">Login</a>
+  <a href="#">Contact</a>
+</div>
+
+<section class="login-page">
+  <div class="login-container">
+    <div class="login-header">
+      <h1><i class="fas fa-user-circle"></i> Welcome Back</h1>
+      <p>Sign in to your account or create a new one</p>
+    </div>
+
+    <!-- Tabs for Login/Register -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTab" onclick="switchTab('login')">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </button>
+      <button class="auth-tab" id="registerTab" onclick="switchTab('register')">
+        <i class="fas fa-user-plus"></i> Register
+      </button>
+    </div>
+
+
+
+    <!-- Login Form -->
+    <div id="loginFormContainer" class="auth-form-container">
+      <form id="loginForm" class="auth-form" onsubmit="handleFirebaseLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">
+            <i class="fas fa-envelope"></i> Email Address <span class="required">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="loginEmail" 
+            name="email" 
+            placeholder="your.email@example.com"
+            required
+            autocomplete="email"
+          >
+          <span class="error-message" id="loginEmailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">
+            <i class="fas fa-lock"></i> Password <span class="required">*</span>
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              id="loginPassword" 
+              name="password" 
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            >
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('loginPassword', this)"></i>
+          </div>
+          <span class="error-message" id="loginPasswordError"></span>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="rememberMe" name="rememberMe">
+          <label for="rememberMe">Remember me</label>
+          <a href="#" class="forgot-password-link" onclick="handleForgotPassword(event)">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="submit-btn" id="loginSubmitBtn">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+
+        <div class="auth-divider">
+          <span>or</span>
+        </div>
+
+        <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">
+          <i class="fab fa-google"></i> Sign in with Google
+        </button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerFormContainer" class="auth-form-container" style="display: none;">
+      <form id="registerForm" class="auth-form" onsubmit="handleFirebaseRegister(event)">
+        <div class="form-group">
+          <label for="registerFullName">
+            <i class="fas fa-user"></i> Full Name <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="registerFullName" 
+            name="fullName" 
+            placeholder="John Doe"
+            required
+            autocomplete="name"
+          >
+          <span class="error-message" id="registerFullNameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="registerEmail">
+            <i class="fas fa-envelope"></i> Email Address <span class="required">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="registerEmail" 
+            name="email" 
+            placeholder="your.email@example.com"
+            required
+            autocomplete="email"
+          >
+          <span class="error-message" id="registerEmailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="registerPhone">
+            <i class="fas fa-phone"></i> Phone Number <span class="required">*</span>
+          </label>
+          <input 
+            type="tel" 
+            id="registerPhone" 
+            name="phone" 
+            placeholder="+254 712 345 678"
+            required
+            autocomplete="tel"
+          >
+          <span class="error-message" id="registerPhoneError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="registerPassword">
+            <i class="fas fa-lock"></i> Password <span class="required">*</span>
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              id="registerPassword" 
+              name="password" 
+              placeholder="At least 8 characters"
+              required
+              autocomplete="new-password"
+            >
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('registerPassword', this)"></i>
+          </div>
+          <small class="password-hint">Must be at least 8 characters with letters and numbers</small>
+          <span class="error-message" id="registerPasswordError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="registerConfirmPassword">
+            <i class="fas fa-lock"></i> Confirm Password <span class="required">*</span>
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              id="registerConfirmPassword" 
+              name="confirmPassword" 
+              placeholder="Confirm your password"
+              required
+              autocomplete="new-password"
+            >
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('registerConfirmPassword', this)"></i>
+          </div>
+          <span class="error-message" id="registerConfirmPasswordError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="registerAddress">
+            <i class="fas fa-map-marker-alt"></i> Delivery Address <span class="required">*</span>
+          </label>
+          <textarea 
+            id="registerAddress" 
+            name="address" 
+            rows="3" 
+            placeholder="Enter your delivery address"
+            required
+          ></textarea>
+          <span class="error-message" id="registerAddressError"></span>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="registerTerms" name="terms" required>
+          <label for="registerTerms">
+            I agree to the <a href="#" target="_blank">Terms & Conditions</a> and 
+            <a href="#" target="_blank">Privacy Policy</a>
+          </label>
+          <span class="error-message" id="registerTermsError"></span>
+        </div>
+
+        <button type="submit" class="submit-btn" id="registerSubmitBtn">
+          <i class="fas fa-user-check"></i> Create Account
+        </button>
+
+        <div class="auth-divider">
+          <span>or</span>
+        </div>
+
+        <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">
+          <i class="fab fa-google"></i> Sign up with Google
+        </button>
+      </form>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Processing...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>FastFoodExpress</h3>
+      <p>Fresh • Fast • Delivered</p>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">Cart</a>
+    </div>
+    <div class="footer-section">
+      <h3>Contact Info</h3>
+      <p><i class="fas fa-map-marker-alt"></i> Nyeri County, Kenya</p>
+      <p><i class="fas fa-phone"></i> +254 712 345 678</p>
+      <p><i class="fas fa-envelope"></i> info@fastfoodexpress.co.ke</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 FastFoodExpress. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
+
